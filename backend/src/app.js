@@ -1,5 +1,6 @@
 const express = require('express'); // importa o express e salva na variável express
 const cors = require('cors');
+const {errors} = require('celebrate');
 const routes = require('./routes');
 
 const app = express();
@@ -7,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(routes);
+app.use(errors())
 
 /**
  * Métodos HTTP::
@@ -37,4 +39,4 @@ app.use(routes);
  * Request Body -> Corpo da requisição. Usado para criar ou alterar recursos
  */
 
-app.listen(3333);
+module.exports = app;

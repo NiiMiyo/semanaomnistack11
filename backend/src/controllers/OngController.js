@@ -1,37 +1,12 @@
-const connection = require('../database/connection.js');
-const crypto = require('crypto');
+const generateUniqueId = require('../utils/generateUniqueId');
+const connection = require('../database/connection');
 
 module.exports = {
 	async create(request, response) {
 
-		async function idAlreadyInUse(id) {
-			const ong = await connection('ongs').where('id', id).first();
-
-			console.log('na condição');
-
-
-			if (!ong) {
-				console.log("n tem esse id n");
-
-				return false;
-			} else {
-				console.log('ja tem o id', id);
-
-				return true;
-			}
-		}
-
 		const { name, email, whatsapp, city, uf } = request.body;
 
-		let id = null;
-		console.log("id nula :", id);
-
-		do {
-			console.log("id ta gerando:", id);
-			id = crypto.randomBytes(4).toString('HEX');
-		} while (!idAlreadyInUse(id))
-
-		console.log("id gerou:", id);
+		const id = generateUniqueId(); 
 
 		await connection('ongs').insert({
 			id,
@@ -41,7 +16,6 @@ module.exports = {
 			city,
 			uf,
 		});
-
 
 		return response.json({ id });
 	},
